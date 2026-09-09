@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Além do Abandono - Adoção de Pets em São Borja</title>
+    <meta name="description"
+        content="Adote um pet em São Borja. Cães e gatos resgatados esperando por um lar cheio de amor. Projeto Além do Abandono IFFar.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85A2A;
+            --secondary: #004E89;
+            --accent: #FFD23F;
+            --bg: #FAFBFC;
+            --white: #FFFFFF;
+            --text: #1A202C;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --success: #38A169;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--secondary);
+            line-height: 1.1;
+        }
+
+        .logo-city {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-menu {
+            display: none;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+
+        .dropdown { position: relative; }
+.dropdown-btn { 
+    color: var(--text-light); 
+    text-decoration: none; 
+    font-weight: 600; 
+    font-size: 15px; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+    transition: all 0.2s;
+    padding: 8px 0; /* Adiciona padding pra aumentar área de hover */
+}
+.dropdown-btn:hover { color: var(--primary); }
+.dropdown-content { 
+    display: none; 
+    position: absolute; 
+    top: 100%; 
+    left: 0; 
+    padding-top: 8px; /* Troca margin-top por padding-top */
+    background: transparent;
+    min-width: 220px; 
+    z-index: 100;
+}
+.dropdown:hover .dropdown-content { 
+    display: block; 
+    animation: slideDown 0.2s; 
+}
+.dropdown-content::before {
+    content: '';
+    display: block;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.dropdown-content a { 
+    display: block; 
+    padding: 12px 16px; 
+    color: var(--text); 
+    text-decoration: none; 
+    font-weight: 500; 
+    font-size: 14px; 
+    transition: all 0.2s;
+    background: var(--white);
+}
+.dropdown-content a:first-child {
+    border-radius: 12px 12px 0 0;
+}
+.dropdown-content a:last-child {
+    border-radius: 0 0 12px 12px;
+}
+.dropdown-content a:hover { background: var(--bg); color: var(--primary); }
+
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-auth {
+            padding: 9px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: 2px solid;
+            white-space: nowrap;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--secondary);
+            border-color: var(--border);
+        }
+
+        .btn-login:hover {
+            border-color: var(--secondary);
+            background: var(--bg);
+        }
+
+        .btn-signup {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-menu {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
+
+        .mobile-content {
+            background: var(--white);
+            width: 280px;
+            height: 100%;
+            padding: 24px 20px;
+            animation: slideRight 0.3s;
+            overflow-y: auto;
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 14px 12px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .mobile-nav a:hover {
+            background: var(--bg);
+            color: var(--primary);
+        }
+
+        .mobile-nav .sub-link {
+            padding-left: 28px;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .mobile-divider {
+            margin: 16px 0;
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--secondary) 0%, #0066B3 100%);
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
+            background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="white"><path d="M30 15c-3 0-5 2-5 5s2 5 5 5 5-2 5-5-2-5-5-5zm-15 15c-3 0-5 2-5 5s2 5 5 5 5-2 5-5-2-5-5-5zm30 0c-3 0-5 2-5 5s2 5 5 5 5-2 5-5-2-5-5-5z"/></g></svg>');
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 16px;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+        }
+
+        .hero-logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 24px;
+            border-radius: 24px;
+            
+            border: 0px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 8vw, 60px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 4vw, 20px);
+            opacity: 0.95;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero {
+            padding: 16px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--secondary);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: white;
+            opacity: 0.8;
+            font-size: 24px;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .stats {
+            background: var(--white);
+            padding: 32px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-bar {
+            background: var(--white);
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 68px;
+            z-index: 90;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .filter-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .filter-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-pill {
+            flex-shrink: 0;
+            padding: 10px 20px;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .filter-pill:active {
+            transform: scale(0.96);
+        }
+
+        .filter-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-info {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .filter-info strong {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .pets-section,
+        .content-section {
+            padding: 60px 16px 80px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .section-head h2 {
+            font-size: clamp(28px, 6vw, 40px);
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .section-head p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .pet-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .pet-card:active {
+            transform: scale(0.98);
+        }
+
+        .pet-image-wrap {
+            position: relative;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .pet-card:hover .pet-image {
+            transform: scale(1.05);
+        }
+
+        .pet-type {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+
+        .pet-body {
+            padding: 20px;
+        }
+
+        .pet-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .pet-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: var(--bg);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .pet-desc {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .pet-features {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .feature.yes {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .btn-adopt {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-adopt:active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        .state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .state-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .state-text {
+            color: #A0AEC0;
+            font-size: 14px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .info-card {
+            background: var(--white);
+            padding: 32px 24px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .info-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+
+        .info-card p {
+            color: var(--text-light);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: var(--secondary);
+            color: white;
+            padding: 48px 16px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-brand {
+            text-align: center;
+        }
+
+        .footer-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            margin: 0 auto 16px;
+        }
+
+        .footer-brand h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .footer-brand p {
+            opacity: 0.85;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-height: 90vh;
+            border-radius: 24px 24px 0 0;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 24px 20px 32px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .nav {
+                padding: 16px 24px;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 24px;
+                align-items: center;
+            }
+
+            .btn-menu {
+                display: none;
+            }
+
+            .hero-container {
+                padding: 80px 24px;
+            }
+
+            .pets-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 24px;
+            }
+
+            .footer-main {
+                grid-template-columns: 1.5fr 1fr;
+                text-align: left;
+            }
+
+            .footer-brand {
+                text-align: left;
+            }
+
+            .footer-links {
+                grid-template-columns: repeat(2, 1fr);
+                text-align: left;
+            }
+
+            .modal {
+                align-items: center;
+                padding: 20px;
+            }
+
+            .modal.active {
+                align-items: center;
+            }
+
+            .modal-content {
+                max-width: 600px;
+                border-radius: 24px;
+                max-height: 90vh;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-container {
+                padding: 80px 24px;
+            }
+
+            .pets-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 28px;
+            }
+
+            .pet-card:hover {
+                transform: translateY(-4px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .pet-card:active {
+                transform: translateY(-4px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo-link">
+                <img src="logo-alem-do-abandono-2.png" alt="Logo Além do Abandono"
+                    class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">Além do Abandono</span>
+                    <span class="logo-city">São Borja • RS</span>
+                </div>
+            </a>
+            <div class="nav-menu">
+                <div class="dropdown">
+                    <a href="#pets" class="dropdown-btn">Adoção ▼</a>
+                    <div class="dropdown-content">
+                        <a href="#pets">🐾 Adotar um Pet</a>
+                        <a href="anunciar.html">📝 Anunciar Pet</a>
+                        <a href="#adotados">❤️ Pets Adotados</a>
+                        <a href="#como-funciona">❓ Como Funciona</a>
+                    </div>
+                </div>
+                <a href="#sobre">Sobre</a>
+                <a href="#contato">Contato</a>
+            </div>
+            <div class="nav-right">
+                <div class="btn-group" id="authButtons">
+                    <a href="login.html" class="btn-auth btn-login">Entrar</a>
+                    <a href="cadastro.html" class="btn-auth btn-signup">Cadastrar</a>
+                </div>
+                <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-content">
+            <div class="mobile-header">
+                <div class="logo-link">
+                    <img src="logo-alem-do-abandono.png" alt="Logo" class="logo-img">
+                    <div class="logo-text">
+                        <span class="logo-name">Além do Abandono</span>
+                        <span class="logo-city">São Borja • RS</span>
+                    </div>
+                </div>
+                <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
+            </div>
+            <nav class="mobile-nav">
+                <a href="#pets" onclick="toggleMobileMenu()">🐾 Adotar um Pet</a>
+                <a href="anunciar.html" onclick="toggleMobileMenu()">📝 Anunciar Pet</a>
+                <a href="#adotados" onclick="toggleMobileMenu()">❤️ Pets Adotados</a>
+                <a href="#como-funciona" onclick="toggleMobileMenu()">❓ Como Funciona</a>
+                <hr class="mobile-divider">
+                <a href="#sobre" onclick="toggleMobileMenu()">ℹ️ Sobre</a>
+                <a href="#contato" onclick="toggleMobileMenu()">📧 Contato</a>
+                <hr class="mobile-divider">
+                <a href="login.html" onclick="toggleMobileMenu()">🔑 Entrar</a>
+                <a href="cadastro.html" onclick="toggleMobileMenu()">✨ Cadastrar</a>
+            </nav>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <img src="logo-alem-do-abandono.png" alt="Além do Abandono" class="hero-logo">
+                <h1>Adote amor,<br>transforme vidas</h1>
+                <p>Em São Borja, centenas de pets esperam por um lar. Conheça nossos anjinhos e encontre seu melhor
+                    amigo hoje mesmo.</p>
+                <div class="hero-buttons">
+                    <a href="#pets" class="btn-hero btn-primary">❤️ Ver Pets Disponíveis</a>
+                    <a href="https://www.instagram.com/projetoalemdoabandono/" target="_blank"
+                        class="btn-hero btn-secondary">📷 Instagram</a>
+                </div>
+            </div>
+            <div class="scroll-indicator">↓</div>
+    </section>
+
+    <div class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-number" id="statDisponiveis">0</div>
+                <div class="stat-label">Disponíveis</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="statAdotados">0</div>
+                <div class="stat-label">Adotados</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Amor</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <div class="filter-container">
+            <div class="filter-scroll">
+                <button class="filter-pill active" data-filter="todos">Todos</button>
+                <button class="filter-pill" data-filter="cao">🐕 Cães</button>
+                <button class="filter-pill" data-filter="gato">🐱 Gatos</button>
+                <button class="filter-pill" data-filter="pequeno">Pequeno</button>
+                <button class="filter-pill" data-filter="medio">Médio</button>
+                <button class="filter-pill" data-filter="grande">Grande</button>
+                <button class="filter-pill" data-filter="filhote">Filhotes</button>
+            </div>
+            <div class="filter-info"><strong id="countPets">0</strong> pets encontrados</div>
+        </div>
+    </div>
+
+    <section class="pets-section" id="pets">
+        <div class="section-head">
+            <h2>Pets Esperando Por Você</h2>
+            <p>Todos vacinados, castrados e prontos para amar</p>
+        </div>
+        <div class="pets-grid" id="petsGrid">
+            <div class="state">
+                <div class="spinner"></div>
+                <div class="state-title">Carregando pets...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO ANUNCIAR PET -->
+    <section class="content-section" id="anunciar" style="display: none; background: var(--white); padding: 80px 16px;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="section-head">
+                <h2>Anunciar um Pet</h2>
+                <p>Encontrou um animal precisando de lar? Cadastre aqui</p>
+            </div>
+            <div class="info-card" style="text-align: left;">
+                <p style="color: var(--text-light); margin-bottom: 24px;">Para anunciar um pet para adoção, você precisa
+                    estar logado. Isso garante a segurança e permite acompanharmos o processo de adoção.</p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <a href="login.html" class="btn-auth btn-login" style="display: inline-block;">Já tenho conta</a>
+                    <a href="cadastro.html" class="btn-auth btn-signup" style="display: inline-block;">Criar conta</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PETS ADOTADOS -->
+    <section class="content-section" id="adotados" style="display: none;">
+        <div class="section-head">
+            <h2>Pets que Encontraram um Lar</h2>
+            <p>Histórias de sucesso que aquecem o coração</p>
+        </div>
+        <div class="pets-grid" id="petsAdotadosGrid">
+            <div class="state">
+                <div class="spinner"></div>
+                <div class="state-title">Carregando...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO COMO FUNCIONA -->
+    <section class="content-section" id="como-funciona" style="display: none; background: var(--white);">
+        <div class="section-head">
+            <h2>Como Funciona a Adoção</h2>
+            <p>Processo simples, seguro e responsável</p>
+        </div>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon">1️⃣</div>
+                <h3>Escolha seu Pet</h3>
+                <p>Navegue pelos animais disponíveis e encontre aquele que combina com seu estilo de vida.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">2️⃣</div>
+                <h3>Entre em Contato</h3>
+                <p>Clique em "Quero Adotar" e fale direto com a gente pelo WhatsApp. Tire todas suas dúvidas.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">3️⃣</div>
+                <h3>Entrevista</h3>
+                <p>Fazemos uma conversa pra garantir que você e o pet sejam perfeitos um pro outro.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">4️⃣</div>
+                <h3>Termo de Adoção</h3>
+                <p>Assinamos um termo de adoção responsável. Compromisso com vacina, castração e muito amor.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">5️⃣</div>
+                <h3>Leve pra Casa</h3>
+                <p>Pronto! Agora é só buscar seu novo melhor amigo e começar essa história de amor.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">6️⃣</div>
+                <h3>Acompanhamento</h3>
+                <p>Ficamos em contato nos primeiros meses pra garantir que está tudo bem com vocês.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO SOBRE -->
+    <section class="content-section" id="sobre" style="display: none; background: var(--white);">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div class="section-head">
+                <h2>Sobre o Projeto</h2>
+                <p>Transformando vidas através do amor</p>
+            </div>
+            <div class="info-card" style="text-align: left; margin-bottom: 24px;">
+                <h3 style="color: var(--secondary); margin-bottom: 16px;">Nossa Missão</h3>
+                <p style="color: var(--text-light); line-height: 1.8; margin-bottom: 16px;">
+                    O Além do Abandono é um projeto de adoção responsável desenvolvido por alunos do IFFar Campus São
+                    Borja.
+                    Nosso objetivo é conectar animais resgatados com famílias amorosas, promovendo a adoção consciente e
+                    combatendo o abandono de animais em nossa cidade.
+                </p>
+                <p style="color: var(--text-light); line-height: 1.8;">
+                    Todos os pets são resgatados, tratados por veterinários, vacinados, castrados e só então
+                    disponibilizados
+                    para adoção. Acompanhamos cada adoção pra garantir que animal e família sejam felizes juntos.
+                </p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">🏥</div>
+                    <h3>Saúde Garantida</h3>
+                    <p>Todos os animais passam por avaliação veterinária completa antes da adoção.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">✂️</div>
+                    <h3>Castração</h3>
+                    <p>Castração obrigatória pra controlar a população e prevenir doenças.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">💉</div>
+                    <h3>Vacinados</h3>
+                    <p>Carteira de vacinação em dia, protegendo seu novo amigo de doenças.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<footer class="footer" id="contato">
+    <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <img src="logo-alem-do-abandono.png" alt="Logo" class="footer-logo">
+                <h3>Além do Abandono</h3>
+                <p>Projeto de adoção responsável desenvolvido no IFFar Campus São Borja. Transformando vidas através do
+                    amor aos animais.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Projeto</h4>
+                    <a href="#pets">Adotar um Pet</a>
+                    <a href="#sobre">Sobre Nós</a>
+                    <a href="admin.html">Painel Admin</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contato</h4>
+                    <a href="https://wa.me/5555999999999" target="_blank">WhatsApp</a>
+                    <a href="https://www.instagram.com/projetoalemdoabandono/" target="_blank">Instagram</a>
+                    <a href="mailto:contato@alemdoabandono.com">Email</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Além do Abandono • São Borja, RS • Feito com ❤️ por alunos do IFFar</p>
+        </div>
+    </div>
+</footer>
+
+<div class="modal" id="modalPet">
+    <div class="modal-content">
+        <button class="modal-close" onclick="fecharModal()">×</button>
+        <img src="" id="modalImg" class="modal-img">
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'api/animais/listar.php';
+    const WHATSAPP = '5555999999999';
+
+    let todosPets = [];
+    let filtroAtual = 'todos';
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('active');
+        document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active')? 'hidden' : '';
+    }
+
+    document.getElementById('mobileMenu').addEventListener('click', (e) => {
+        if (e.target.id === 'mobileMenu') toggleMobileMenu();
+    });
+
+    async function carregarPets() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'Erro ao buscar pets');
+            }
+
+            todosPets = data.data || [];
+
+            document.getElementById('statDisponiveis').textContent = data.total || 0;
+            document.getElementById('statAdotados').textContent = data.adotados || 0;
+
+            renderizarPets();
+        } catch (e) {
+            console.error('Erro:', e);
+            document.getElementById('petsGrid').innerHTML = `
+                <div class="state">
+                    <div class="state-icon">😢</div>
+                    <div class="state-title">Erro ao carregar pets</div>
+                    <div class="state-text">${escaparHtml(e.message || 'Tente recarregar a página')}</div>
+                </div>
+            `;
+        }
+    }
+
+    function escaparHtml(valor) {
+        return String(valor ?? '').replace(/[&<>"]/g, caractere => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
+        })[caractere]);
+    }
+
+    function urlImagemSegura(valor) {
+        const url = String(valor || '');
+        if (url.startsWith('/api/uploads/')) return url;
+        try {
+            const analisada = new URL(url, window.location.origin);
+            return ['http:', 'https:'].includes(analisada.protocol) ? analisada.href : '';
+        } catch (_) {
+            return '';
+        }
+    }
+
+    function renderizarPets() {
+        const grid = document.getElementById('petsGrid');
+        let filtrados = todosPets;
+
+        if (filtroAtual!== 'todos') {
+            if (['cao', 'gato'].includes(filtroAtual)) {
+                filtrados = todosPets.filter(p => p.tipo === filtroAtual);
+            } else if (['pequeno', 'medio', 'grande'].includes(filtroAtual)) {
+                filtrados = todosPets.filter(p => p.porte === filtroAtual);
+            } else if (filtroAtual === 'filhote') {
+                filtrados = todosPets.filter(p => p.idade === 'filhote');
+            }
+        }
+
+        document.getElementById('countPets').textContent = filtrados.length;
+
+        if (filtrados.length === 0) {
+            grid.innerHTML = `
+                <div class="state">
+                    <div class="state-icon">🔍</div>
+                    <div class="state-title">Nenhum pet encontrado</div>
+                    <div class="state-text">Tente outro filtro ou volte mais tarde</div>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtrados.map(pet => `
+            <article class="pet-card" onclick="abrirModal(${pet.id})">
+                <div class="pet-image-wrap">
+                    <img src="${urlImagemSegura(pet.fotos?.[0]) || 'https://via.placeholder.com/400x300/004E89/FFFFFF?text=Sem+Foto'}"
+                         alt="${escaparHtml(pet.nome)}"
+                         class="pet-image"
+                         loading="lazy">
+                    <span class="pet-type">${pet.tipo === 'cao'? '🐕 Cão' : '🐱 Gato'}</span>
+                </div>
+                <div class="pet-body">
+                    <h3 class="pet-name">${escaparHtml(pet.nome)}</h3>
+                    <div class="pet-tags">
+                        <span class="tag">${escaparHtml(pet.porte)}</span>
+                        <span class="tag">${escaparHtml(pet.idade_texto || pet.idade)}</span>
+                        <span class="tag">${escaparHtml(pet.raca)}</span>
+                    </div>
+                    <p class="pet-desc">${escaparHtml(pet.descricao || 'Este anjinho está esperando por um lar cheio de amor!')}</p>
+                    <div class="pet-features">
+                        ${pet.castrado? '<span class="feature yes">✓ Castrado</span>' : ''}
+                        ${pet.vacinado? '<span class="feature yes">✓ Vacinado</span>' : ''}
+                    </div>
+                    <button class="btn-adopt" onclick="event.stopPropagation(); adotar(${pet.id})">
+                        Quero Adotar
+                    </button>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    document.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filtroAtual = btn.dataset.filter;
+            renderizarPets();
+
+            if (window.innerWidth < 768) {
+                document.getElementById('pets').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    function abrirModal(petId) {
+        const pet = todosPets.find(p => p.id == petId);
+        if (!pet) return;
+
+        document.getElementById('modalImg').src = urlImagemSegura(pet.fotos?.[0]) || 'https://via.placeholder.com/600x400/004E89/FFFFFF?text=Sem+Foto';
+        document.getElementById('modalBody').innerHTML = `
+                <h2 class="modal-title">${escaparHtml(pet.nome)}</h2>
+                <div class="pet-tags" style="margin-bottom: 16px;">
+                    <span class="tag">${pet.tipo === 'cao'? '🐕 Cão' : '🐱 Gato'}</span>
+                    <span class="tag">${escaparHtml(pet.porte)}</span>
+                    <span class="tag">${escaparHtml(pet.idade_texto || pet.idade)}</span>
+                    <span class="tag">${escaparHtml(pet.raca)}</span>
+                </div>
+                <div class="pet-features" style="margin-bottom: 20px;">
+                    ${pet.castrado? '<span class="feature yes">✓ Castrado</span>' : ''}
+                    ${pet.vacinado? '<span class="feature yes">✓ Vacinado</span>' : ''}
+                </div>
+                <p style="color: var(--text-light); line-height: 1.7; margin-bottom: 24px; font-size: 16px;">${escaparHtml(pet.descricao || 'Este anjinho está esperando por um lar cheio de amor!')}</p>
+                <button class="btn-adopt" style="font-size: 17px; padding: 16px;" onclick="adotar(${pet.id})">
+                    ❤ Quero Adotar o ${escaparHtml(pet.nome)}
+                </button>
+            `;
+        document.getElementById('modalPet').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+        document.getElementById('modalPet').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function adotar(petId) {
+        const pet = todosPets.find(item => item.id == petId);
+        const petNome = pet?.nome || 'animal';
+        const mensagem = `Olá! Vi o ${petNome} no site Além do Abandono e tenho interesse em adotar! 🐾`;
+        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    }
+
+    document.getElementById('modalPet').addEventListener('click', (e) => {
+        if (e.target.id === 'modalPet') fecharModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('modalPet').classList.contains('active')) {
+            fecharModal();
+        }
+    });
+
+    document.addEventListener('touchstart', () => { }, { passive: true });
+
+    document.addEventListener('DOMContentLoaded', carregarPets);
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+            const href = a.getAttribute('href');
+            if (href === '#') return;
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        });
+    });
+
+    function checkAuth() {
+        const token = localStorage.getItem('token');
+        const authButtons = document.getElementById('authButtons');
+        if (token && authButtons) {
+            try {
+                const user = JSON.parse(localStorage.getItem('usuario') || '{}');
+                const isAdmin = user.tipo === 'admin';
+                const primeiroNome = escaparHtml(user.nome?.split(' ')[0] || 'Usuário');
+                authButtons.innerHTML = `
+                    <div class="dropdown">
+                        <button class="user-btn" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--bg); border: 2px solid var(--border); border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;">
+                            👤 ${primeiroNome} ▼
+                        </button>
+                        <div class="dropdown-content" style="right: 0; left: auto;">
+                            <a href="anunciar.html">Anunciar animal</a>
+                            ${isAdmin? '<a href="admin.html">Painel Admin</a>' : ''}
+                            <hr style="margin: 4px 0; border: none; border-top: 1px solid var(--border);">
+                            <a href="#" onclick="logout()">Sair</a>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuario');
+            }
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        window.location.reload();
+    }
+
+    checkAuth();
+</script>
+</body>
+</html>

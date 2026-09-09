@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anunciar Pet - Além do Abandono</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <script>
+    // Trava a página se não tiver logado
+    const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuario');
+
+    if (!token ||!usuario) {
+        alert('Você precisa estar logado para anunciar um pet');
+        window.location.href = 'login.html';
+    }
+
+    // Verifica se o token não expirou
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp < Date.now() / 1000) {
+            localStorage.clear();
+            alert('Sua sessão expirou. Faça login novamente');
+            window.location.href = 'login.html';
+        }
+    } catch(e) {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+    </script>
+
+    <div class="max-w-2xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Cadastrar Pet para Adoção</h1>
+
+        <form id="formPet" class="bg-white p-6 rounded-lg shadow">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nome do pet *</label>
+                    <input type="text" name="nome" required class="w-full border rounded px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Tipo *</label>
+                    <select name="tipo" required class="w-full border rounded px-3 py-2">
+                        <option value="">Selecione</option>
+                        <option value="cao">Cachorro</option>
+                        <option value="gato">Gato</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Porte *</label>
+                    <select name="porte" required class="w-full border rounded px-3 py-2">
+                        <option value="">Selecione</option>
+                        <option value="pequeno">Pequeno</option>
+                        <option value="medio">Médio</option>
+                        <option value="grande">Grande</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Idade *</label>
+                    <select name="idade" required class="w-full border rounded px-3 py-2">
+                        <option value="">Selecione</option>
+                        <option value="filhote">Filhote</option>
+                        <option value="adulto">Adulto</option>
+                        <option value="idoso">Idoso</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Sexo *</label>
+                    <select name="sexo" required class="w-full border rounded px-3 py-2">
+                        <option value="">Selecione</option>
+                        <option value="macho">Macho</option>
+                        <option value="femea">Fêmea</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Raça</label>
+                    <input type="text" name="raca" placeholder="SRD" class="w-full border rounded px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Pelagem *</label>
+                    <select name="pelagem" required class="w-full border rounded px-3 py-2">
+                        <option value="curta">Curta</option><option value="media">Média</option><option value="longa">Longa</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Cor *</label>
+                    <input type="text" name="cor" maxlength="50" required class="w-full border rounded px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Idade em texto</label>
+                    <input type="text" name="idade_texto" placeholder="Ex: 2 anos" class="w-full border rounded px-3 py-2">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Foto do pet *</label>
+                <input type="file" id="inputFoto" name="foto" accept="image/jpeg,image/png,image/webp" required
+                       class="w-full border rounded px-3 py-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-green-50 file:text-green-700">
+                <p class="text-xs text-gray-500 mt-1">JPG, PNG ou WEBP até 5MB</p>
+                <img id="preview" class="hidden mt-3 max-h-48 rounded">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Descrição</label>
+                <textarea name="descricao" rows="4" class="w-full border rounded px-3 py-2" placeholder="Conte sobre o pet..."></textarea>
+            </div>
+
+            <div class="flex gap-6 mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" name="castrado" value="1" class="mr-2">
+                    Castrado
+                </label>
+                <label class="flex items-center">
+                    <input type="checkbox" name="vacinado" value="1" class="mr-2">
+                    Vacinado
+                </label>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-green-600 text-white py-3 rounded font-medium hover:bg-green-700">
+                Cadastrar Pet
+            </button>
+
+            <p id="msg" class="mt-4 text-center text-sm"></p>
+        </form>
+    </div>
+
+<script>
+// Preview da imagem
+document.getElementById('inputFoto').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const preview = document.getElementById('preview');
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('hidden');
+    }
+});
+
+document.getElementById('formPet').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    const btn = document.getElementById('btnSubmit');
+    const msg = document.getElementById('msg');
+    btn.disabled = true;
+    btn.textContent = 'Enviando foto...';
+    msg.textContent = '';
+
+    const formData = new FormData(e.target);
+    const foto = formData.get('foto');
+
+    if (!foto || foto.size === 0) {
+        msg.className = 'mt-4 text-center text-sm text-red-600';
+        msg.textContent = 'Selecione uma foto';
+        btn.disabled = false;
+        btn.textContent = 'Cadastrar Pet';
+        return;
+    }
+
+    try {
+        // 1. Faz upload da foto primeiro
+        const uploadData = new FormData();
+        uploadData.append('foto', foto);
+
+        const uploadRes = await fetch('api/upload.php', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: uploadData
+        });
+
+        const uploadJson = await uploadRes.json();
+
+        if (!uploadJson.success) {
+            throw new Error(uploadJson.message);
+        }
+
+        btn.textContent = 'Cadastrando pet...';
+
+        // 2. Cadastra o pet com a URL da foto
+        const dados = {
+            nome: formData.get('nome'),
+            tipo: formData.get('tipo'),
+            porte: formData.get('porte'),
+            idade: formData.get('idade'),
+            sexo: formData.get('sexo'),
+            raca: formData.get('raca') || 'SRD',
+            pelagem: formData.get('pelagem'),
+            cor: formData.get('cor'),
+            idade_texto: formData.get('idade_texto') || null,
+            descricao: formData.get('descricao') || null,
+            fotos: [uploadJson.url],
+            castrado: formData.get('castrado')? 1 : 0,
+            vacinado: formData.get('vacinado')? 1 : 0
+        };
+
+        const res = await fetch('api/animais/criar.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(dados)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            msg.className = 'mt-4 text-center text-sm text-green-600';
+            msg.textContent = 'Pet cadastrado com sucesso! Redirecionando...';
+            setTimeout(() => window.location.href = 'index.html', 1500);
+        } else {
+            throw new Error(data.message);
+        }
+
+    } catch (err) {
+        msg.className = 'mt-4 text-center text-sm text-red-600';
+        msg.textContent = err.message || 'Erro ao cadastrar';
+        btn.disabled = false;
+        btn.textContent = 'Cadastrar Pet';
+    }
+});
+</script>
+</body>
+</html>

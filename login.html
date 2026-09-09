@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - Além do Abandono</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85A2A;
+            --secondary: #004E89;
+            --bg: #FAFBFC;
+            --white: #FFFFFF;
+            --text: #1A202C;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --error: #E53E3E;
+            --success: #38A169;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, var(--secondary) 0%, #0066B3 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 32px;
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo-wrap {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 3px;
+            margin: 0 auto 3px;
+            box-shadow: var(--shadow);
+        }
+        .login-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 3px;
+        }
+        .login-subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        .form-input.error {
+            border-color: var(--error);
+        }
+        .error-msg {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+        .error-msg.show {
+            display: block;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+        }
+        .divider span {
+            background: var(--white);
+            padding: 0 16px;
+            position: relative;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        .link-cadastro {
+            text-align: center;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+        .link-cadastro a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .link-cadastro a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+        }
+        .alert.show { display: block; animation: slideDown 0.3s; }
+        .alert-error {
+            background: #FED7D7;
+            color: #C53030;
+            border: 1px solid #FC8181;
+        }
+        .alert-success {
+            background: #C6F6D5;
+            color: #22543D;
+            border: 1px solid #9AE6B4;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+        .back-home:hover {
+            background: rgba(255,255,255,0.25);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home">← Voltar</a>
+    
+    <div class="login-container">
+        <div class="logo-wrap">
+            <img src="logo-alem-do-abandono-2.png" alt="Logo" class="logo-img">
+            <h1 class="login-title">Bem-vindo de volta</h1>
+            <p class="login-subtitle">Entre para adotar ou anunciar um pet</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    class="form-input" 
+                    placeholder="seu@email.com"
+                    required
+                >
+                <div class="error-msg" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="senha">Senha</label>
+                <input 
+                    type="password" 
+                    id="senha" 
+                    class="form-input" 
+                    placeholder="••••••••"
+                    required
+                >
+                <div class="error-msg" id="senhaError"></div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnSubmit">
+                Entrar
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>ou</span>
+        </div>
+
+        <div class="link-cadastro">
+            Não tem conta? <a href="cadastro.html">Cadastre-se grátis</a>
+        </div>
+    </div>
+
+    <script>
+        const API_LOGIN = 'api/auth/login.php';
+        
+        const form = document.getElementById('loginForm');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const alert = document.getElementById('alert');
+
+        function showAlert(message, type = 'error') {
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function showError(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const error = document.getElementById(fieldId + 'Error');
+            input.classList.add('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            document.querySelectorAll('.error-msg').forEach(error => {
+                error.classList.remove('show');
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+
+            if (!email) {
+                showError('email', 'Email é obrigatório');
+                return;
+            }
+            if (!senha) {
+                showError('senha', 'Senha é obrigatória');
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Entrando...';
+
+            try {
+                const res = await fetch(API_LOGIN, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+                    showAlert('Login realizado! Redirecionando...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Erro ao fazer login');
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = 'Entrar';
+                }
+            } catch (error) {
+                showAlert('Erro de conexão. Tente novamente.');
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Entrar';
+            }
+        });
+
+        // Se já tá logado, redireciona
+        if (localStorage.getItem('token')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

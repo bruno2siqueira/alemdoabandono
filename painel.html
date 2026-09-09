@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Além do Abandono</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35; --primary-dark: #e55a2b; --secondary: #004E89; --bg: #f8fafc;
+            --white: #ffffff; --text: #0f172a; --text-light: #64748b; --border: #e2e8f0;
+            --success: #10b981; --success-bg: #d1fae5; --danger: #ef4444; --danger-bg: #fee2e2;
+            --warning: #f59e0b; --warning-bg: #fef3c7; --info: #3b82f6; --info-bg: #dbeafe;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+       .app { display: flex; min-height: 100vh; }
+       .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 24px 0; position: fixed; height: 100vh; overflow-y: auto; }
+       .logo { padding: 0 24px 32px; font-size: 20px; font-weight: 700; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
+       .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: var(--text-light); text-decoration: none; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; font-weight: 500; }
+       .nav-item:hover { background: var(--bg); color: var(--text); }
+       .nav-item.active { background: #fff5f2; color: var(--primary); border-left-color: var(--primary); }
+       .main { margin-left: 260px; flex: 1; }
+       .header { background: var(--white); padding: 20px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+       .header h1 { font-size: 24px; font-weight: 700; color: var(--text); }
+       .user-menu { display: flex; align-items: center; gap: 16px; }
+       .user-name { font-weight: 500; color: var(--text-light); }
+       .btn-logout { background: var(--danger); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+       .btn-logout:hover { background: #dc2626; transform: translateY(-1px); }
+       .content { padding: 32px; }
+       .page { display: none; }
+       .page.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+       .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px; }
+       .stat-card { background: var(--white); padding: 24px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+       .stat-card.label { color: var(--text-light); font-size: 14px; margin-bottom: 8px; font-weight: 500; }
+       .stat-card.value { font-size: 36px; font-weight: 700; color: var(--secondary); }
+       .card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+       .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+       .card-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+       .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+       .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+       .btn-primary { background: var(--primary); color: white; }
+       .btn-primary:hover { background: var(--primary-dark); }
+       .btn-success { background: var(--success); color: white; }
+       .btn-danger { background: var(--danger); color: white; }
+       .btn-warning { background: var(--warning); color: white; }
+       .btn-ghost { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+       .btn-ghost:hover { background: var(--bg); color: var(--text); }
+       .btn-sm { padding: 8px 14px; font-size: 13px; }
+       .btn-icon { padding: 8px; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 24px; text-align: left; }
+        th { background: var(--bg); font-weight: 600; font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        tr { border-bottom: 1px solid var(--border); transition: all 0.2s; }
+        tbody tr:hover { background: var(--bg); }
+        tbody tr.inactive { opacity: 0.6; background: #fafafa; }
+        tbody tr.inactive:hover { opacity: 0.8; }
+       .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+       .badge-success { background: var(--success-bg); color: #065f46; }
+       .badge-warning { background: var(--warning-bg); color: #92400e; }
+       .badge-danger { background: var(--danger-bg); color: #991b1b; }
+       .badge-info { background: var(--info-bg); color: #1e40af; }
+       .badge-secondary { background: #f1f5f9; color: #475569; }
+       .actions { display: flex; gap: 6px; }
+       .img-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; border: 2px solid var(--border); }
+       .animal-info { display: flex; align-items: center; gap: 12px; }
+       .animal-info.details { display: flex; flex-direction: column; gap: 2px; }
+       .animal-info.name { font-weight: 600; color: var(--text); }
+       .animal-info.meta { font-size: 13px; color: var(--text-light); }
+       .user-cell { display: flex; flex-direction: column; gap: 2px; }
+       .user-cell.name { font-weight: 600; color: var(--text); font-size: 14px; }
+       .user-cell.email { font-size: 13px; color: var(--text-light); }
+       .modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+       .modal.active { display: flex; animation: fadeIn 0.2s; }
+       .modal-content { background: var(--white); border-radius: 16px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+       .modal-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+       .modal-header h3 { font-size: 20px; font-weight: 700; }
+       .modal-close { background: var(--bg); border: none; font-size: 20px; cursor: pointer; color: var(--text-light); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+       .modal-close:hover { background: var(--danger-bg); color: var(--danger); }
+       .modal-body { padding: 28px; }
+       .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+       .form-group { margin-bottom: 18px; }
+       .form-group.full { grid-column: 1 / -1; }
+       .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text); }
+       .form-group input,.form-group select,.form-group textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; transition: all 0.2s; }
+       .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
+       .form-group textarea { resize: vertical; min-height: 90px; }
+       .checkbox-group { display: flex; gap: 24px; padding: 12px 0; }
+       .checkbox-group label { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; color: var(--text); }
+       .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+       .modal-footer { padding: 20px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg); }
+       .btn-secondary { background: var(--white); color: var(--text); border: 1px solid var(--border); }
+       .toast { position: fixed; top: 24px; right: 24px; padding: 16px 20px; border-radius: 10px; background: var(--white); box-shadow: var(--shadow-lg); z-index: 200; display: none; align-items: center; gap: 12px; min-width: 320px; border-left: 4px solid var(--success); }
+       .toast.show { display: flex; animation: slideIn 0.3s; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+       .toast.error { border-left-color: var(--danger); }
+       .loading { text-align: center; padding: 60px; color: var(--text-light); font-weight: 500; }
+       .empty { text-align: center; padding: 80px 20px; color: var(--text-light); }
+       .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+        @media (max-width: 768px) {.sidebar { transform: translateX(-100%); }.main { margin-left: 0; }.stats { grid-template-columns: 1fr; }.form-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">🐾 Além do Abandono</div>
+            <nav>
+                <a class="nav-item active" onclick="showPage('dashboard', this)"><span>📊</span> Dashboard</a>
+                <a class="nav-item" onclick="showPage('animais', this)"><span>🐕</span> Animais</a>
+                <a class="nav-item" onclick="showPage('adocoes', this)"><span>❤</span> Adoções</a>
+            </nav>
+        </aside>
+        <main class="main">
+            <header class="header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="user-menu">
+                    <span class="user-name" id="userName"></span>
+                    <button class="btn-logout" onclick="logout()">Sair</button>
+                </div>
+            </header>
+            <div class="content">
+                <div id="page-dashboard" class="page active">
+                    <div class="stats">
+                        <div class="stat-card"><div class="label">Total de Animais</div><div class="value" id="statTotal">0</div></div>
+                        <div class="stat-card"><div class="label">Disponíveis</div><div class="value" id="statDisponiveis">0</div></div>
+                        <div class="stat-card"><div class="label">Adotados</div><div class="value" id="statAdotados">0</div></div>
+                    </div>
+                    <div class="card"><div class="card-header"><h2>Últimos Animais Cadastrados</h2></div><div id="dashboardTable"></div></div>
+                </div>
+                <div id="page-animais" class="page">
+                    <div class="card">
+                        <div class="card-header"><h2>Gerenciar Animais</h2><button class="btn btn-primary" onclick="openModal()">+ Novo Animal</button></div>
+                        <div id="animaisTable"></div>
+                    </div>
+                </div>
+                <div id="page-adocoes" class="page">
+                    <div class="card"><div class="card-header"><h2>Pedidos de Adoção</h2></div><div id="adocoesTable"></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="modal" id="modalAnimal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="modalTitle">Novo Animal</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div class="modal-body">
+                <form id="formAnimal">
+                    <input type="hidden" id="animalId">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nome *</label><input type="text" id="animalNome" required></div>
+                        <div class="form-group"><label>Tipo *</label><select id="animalTipo" required><option value="cao">Cão</option><option value="gato">Gato</option></select></div>
+                        <div class="form-group"><label>Porte *</label><select id="animalPorte" required><option value="pequeno">Pequeno</option><option value="medio">Médio</option><option value="grande">Grande</option></select></div>
+                        <div class="form-group"><label>Idade *</label><select id="animalIdade" required><option value="filhote">Filhote - até 1 ano</option><option value="adulto">Adulto - 1 a 7 anos</option><option value="idoso">Idoso - 7+ anos</option></select></div>
+                        <div class="form-group"><label>Sexo *</label><select id="animalSexo" required><option value="macho">Macho</option><option value="femea">Fêmea</option></select></div>
+                        <div class="form-group"><label>Idade Texto *</label><input type="text" id="animalIdadeTexto" placeholder="Ex: 3 anos" required></div>
+                        <div class="form-group"><label>Raça</label><input type="text" id="animalRaca" value="SRD"></div>
+                        <div class="form-group"><label>Pelagem *</label><select id="animalPelagem" required><option value="curta">Curta</option><option value="media">Média</option><option value="longa">Longa</option></select></div>
+                        <div class="form-group"><label>Cor *</label><input type="text" id="animalCor" required></div>
+                        <div class="form-group full"><label>Descrição *</label><textarea id="animalDesc" required></textarea></div>
+                        <div class="form-group full"><label>URLs das Fotos * (uma por linha)</label><textarea id="animalFotos" rows="4" placeholder="https://images.unsplash.com/..." required></textarea></div>
+                        <div class="form-group full"><div class="checkbox-group"><label><input type="checkbox" id="animalCastrado"> Castrado</label><label><input type="checkbox" id="animalVacinado"> Vacinado</label></div></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" onclick="salvarAnimal()">Salvar</button></div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+<script>
+const API_BASE = 'api/';
+let usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+let animaisCache = [];
+
+function escaparHtml(valor) {
+    return String(valor ?? '').replace(/[&<>"]/g, caractere => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
+    })[caractere]);
+}
+
+function urlImagemSegura(valor) {
+    const url = String(valor || '');
+    if (url.startsWith('/api/uploads/')) return url;
+    try {
+        const analisada = new URL(url, window.location.origin);
+        return ['http:', 'https:'].includes(analisada.protocol) ? analisada.href : '';
+    } catch (_) {
+        return '';
+    }
+}
+
+if (!localStorage.getItem('token') || !usuario.id || usuario.tipo !== 'admin') {
+    window.location.href = 'admin.html';
+}
+document.getElementById('userName').textContent = usuario.nome || 'Admin';
+
+function logout() {
+    localStorage.clear();
+    window.location.href = 'admin.html';
+}
+
+function showPage(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    el.classList.add('active');
+    document.getElementById('pageTitle').textContent = el.textContent.trim();
+    if (page === 'dashboard') loadDashboard();
+    if (page === 'animais') loadAnimais();
+    if (page === 'adocoes') loadAdocoes();
+}
+
+async function api(url, options = {}) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        showToast('Token não encontrado', 'error');
+        setTimeout(() => logout(), 1000);
+        throw new Error('Sem token');
+    }
+
+    const fullUrl = API_BASE + url;
+    const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+       ...options.headers
+    };
+
+    try {
+        const res = await fetch(fullUrl, {
+           ...options,
+            headers
+        });
+
+        if (res.status === 404) {
+            throw new Error('Arquivo não encontrado: ' + url);
+        }
+
+        const text = await res.text();
+        if (!text) throw new Error('Resposta vazia do servidor');
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('RESPOSTA NÃO É JSON:', text.substring(0, 200));
+            throw new Error('Servidor retornou HTML');
+        }
+
+        if (res.status === 401) {
+            showToast('Sessão expirada', 'error');
+            setTimeout(() => logout(), 1500);
+            throw new Error('Unauthorized');
+        }
+
+        if (res.status >= 500) throw new Error(data.message || 'Erro interno');
+        return data;
+
+    } catch (e) {
+        console.error('ERRO NO FETCH:', e);
+        if (e.message.includes('Failed to fetch')) {
+            showToast('Erro de conexão', 'error');
+        } else {
+            showToast(e.message, 'error');
+        }
+        throw e;
+    }
+}
+
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.className = 'toast show ' + type;
+    toast.textContent = String(msg);
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+async function loadDashboard() {
+    try {
+        const data = await api('animais/listar-admin.php');
+        if (data.success) {
+            const animais = data.animais || [];
+            document.getElementById('statTotal').textContent = animais.length;
+            document.getElementById('statDisponiveis').textContent = animais.filter(a => a.status === 'disponivel' && a.ativo).length;
+            document.getElementById('statAdotados').textContent = animais.filter(a => a.status === 'adotado').length;
+            const html = animais.length? `
+                <table><thead><tr><th>Foto</th><th>Nome</th><th>Tipo</th><th>Status</th></tr></thead>
+                <tbody>${animais.slice(0, 5).map(a => `
+                    <tr>
+                        <td><img src="${urlImagemSegura(a.fotos && a.fotos[0]) || 'https://via.placeholder.com/56'}" class="img-thumb" alt=""></td>
+                        <td>${escaparHtml(a.nome)}</td><td>${a.tipo === 'cao'? '🐕 Cão' : '🐱 Gato'}</td>
+                        <td><span class="badge badge-${a.status === 'disponivel'? 'success' : 'info'}">${a.status === 'disponivel'? 'Disponível' : 'Adotado'}</span></td>
+                    </tr>`).join('')}</tbody></table>` : '<div class="empty"><div class="empty-icon">🐾</div>Nenhum animal cadastrado</div>';
+            document.getElementById('dashboardTable').innerHTML = html;
+        }
+    } catch (e) {
+        console.error(e);
+        document.getElementById('dashboardTable').innerHTML = '<div class="empty">Erro ao carregar</div>';
+    }
+}
+
+async function loadAnimais() {
+    const container = document.getElementById('animaisTable');
+    container.innerHTML = '<div class="loading">Carregando animais...</div>';
+    try {
+        const data = await api('animais/listar-admin.php');
+        if (data.success) {
+            const animais = data.animais || [];
+            animaisCache = animais;
+            container.innerHTML = animais.length? `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Animal</th>
+                            <th>Tipo</th>
+                            <th>Porte</th>
+                            <th>Status</th>
+                            <th>Visibilidade</th>
+                            <th style="text-align: right;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>${animais.map((a, idx) => `
+                        <tr class="${!a.ativo? 'inactive' : ''}">
+                            <td>
+                                <div class="animal-info">
+                                    <img src="${urlImagemSegura(a.fotos && a.fotos[0]) || 'https://via.placeholder.com/56'}" class="img-thumb" alt="">
+                                    <div class="details">
+                                        <div class="name">${escaparHtml(a.nome)}</div>
+                                        <div class="meta">${escaparHtml(a.raca)} • ${escaparHtml(a.idade_texto)}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-secondary">${a.tipo === 'cao'? '🐕 Cão' : '🐱 Gato'}</span></td>
+                            <td><span class="badge badge-secondary">${escaparHtml(a.porte)}</span></td>
+                            <td><span class="badge badge-${a.status === 'disponivel'? 'success' : 'info'}">${a.status === 'disponivel'? 'Disponível' : 'Adotado'}</span></td>
+                            <td>
+                                <span class="badge badge-${a.ativo? 'success' : 'danger'}">
+                                    ${a.ativo? '✓ Visível' : '✗ Oculto'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions" style="justify-content: flex-end;">
+                                    <button class="btn btn-sm btn-ghost btn-icon" onclick="editarAnimal(${idx})" title="Editar animal">
+                                        ✏
+                                    </button>
+                                    <button class="btn btn-sm ${a.ativo? 'btn-warning' : 'btn-success'} btn-icon" onclick="toggleStatus(${a.id}, ${a.ativo})" title="${a.ativo? 'Ocultar do site' : 'Mostrar no site'}">
+                                        ${a.ativo? '👁🗨' : '👁'}
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>` : `
+                <div class="empty">
+                    <div class="empty-icon">🐾</div>
+                    <div style="font-weight: 600; margin-bottom: 8px;">Nenhum animal cadastrado</div>
+                    <div style="font-size: 14px;">Clique em "Novo Animal" para começar</div>
+                </div>`;
+        }
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="empty">Erro ao carregar animais</div>';
+    }
+}
+
+function openModal(animal = null) {
+    const modal = document.getElementById('modalAnimal');
+    const form = document.getElementById('formAnimal');
+    form.reset();
+    document.getElementById('animalId').value = '';
+    document.getElementById('modalTitle').textContent = 'Novo Animal';
+    if (animal) {
+        document.getElementById('modalTitle').textContent = 'Editar Animal';
+        document.getElementById('animalId').value = animal.id;
+        document.getElementById('animalNome').value = animal.nome;
+        document.getElementById('animalTipo').value = animal.tipo;
+        document.getElementById('animalPorte').value = animal.porte;
+        document.getElementById('animalIdade').value = animal.idade;
+        document.getElementById('animalSexo').value = animal.sexo || 'macho';
+        document.getElementById('animalIdadeTexto').value = animal.idade_texto;
+        document.getElementById('animalRaca').value = animal.raca;
+        document.getElementById('animalPelagem').value = animal.pelagem;
+        document.getElementById('animalCor').value = animal.cor;
+        document.getElementById('animalDesc').value = animal.descricao;
+        document.getElementById('animalFotos').value = (animal.fotos || []).join('\n');
+        document.getElementById('animalCastrado').checked = animal.castrado;
+        document.getElementById('animalVacinado').checked = animal.vacinado;
+    }
+    modal.classList.add('active');
+}
+
+function closeModal() { document.getElementById('modalAnimal').classList.remove('active'); }
+function editarAnimal(idx) { openModal(animaisCache[idx]); }
+
+async function salvarAnimal() {
+    const id = document.getElementById('animalId').value;
+    const fotos = document.getElementById('animalFotos').value.split('\n').filter(f => f.trim());
+    if (!fotos.length) { showToast('Adicione pelo menos uma foto', 'error'); return; }
+
+    const animal = {
+        nome: document.getElementById('animalNome').value,
+        tipo: document.getElementById('animalTipo').value,
+        porte: document.getElementById('animalPorte').value,
+        idade: document.getElementById('animalIdade').value,
+        sexo: document.getElementById('animalSexo').value,
+        idade_texto: document.getElementById('animalIdadeTexto').value,
+        raca: document.getElementById('animalRaca').value,
+        pelagem: document.getElementById('animalPelagem').value,
+        cor: document.getElementById('animalCor').value,
+        descricao: document.getElementById('animalDesc').value,
+        fotos: fotos,
+        castrado: document.getElementById('animalCastrado').checked? 1 : 0,
+        vacinado: document.getElementById('animalVacinado').checked? 1 : 0
+    };
+
+    if (id) animal.id = parseInt(id);
+
+    try {
+        const url = id? 'animais/editar.php' : 'animais/criar.php';
+        const data = await api(url, { method: 'POST', body: JSON.stringify(animal) });
+        if (data.success) {
+            showToast(id? 'Animal atualizado!' : 'Animal cadastrado!');
+            closeModal();
+            loadAnimais();
+            loadDashboard();
+        } else {
+            showToast(data.message || 'Erro ao salvar', 'error');
+        }
+    } catch (e) {
+        console.error(e);
+        showToast('Erro de conexão', 'error');
+    }
+}
+
+async function toggleStatus(id, ativo) {
+    try {
+        const data = await api('animais/status.php', { method: 'POST', body: JSON.stringify({ id, ativo: ativo? 0 : 1 }) });
+        if (data.success) {
+            showToast(ativo? 'Animal ocultado do site' : 'Animal visível no site');
+            loadAnimais();
+            loadDashboard();
+        }
+    } catch (e) { showToast('Erro ao alterar status', 'error'); }
+}
+
+async function loadAdocoes() {
+    const container = document.getElementById('adocoesTable');
+    container.innerHTML = '<div class="loading">Carregando adoções...</div>';
+    try {
+        const data = await api('adocoes/listar.php');
+        if (data.success) {
+            const adocoes = data.data || [];
+            container.innerHTML = adocoes.length? `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pet</th>
+                            <th>Adotante</th>
+                            <th>Doador</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>${adocoes.map(a => `
+                        <tr>
+                            <td>
+                                <div class="animal-info">
+                                    <img src="${urlImagemSegura(a.pet_fotos && a.pet_fotos[0]) || 'https://via.placeholder.com/56'}" class="img-thumb" alt="">
+                                    <div class="details">
+                                        <div class="name">${escaparHtml(a.pet_nome)}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="name">${escaparHtml(a.adotante_nome)}</div>
+                                    <div class="email">${escaparHtml(a.adotante_email)}</div>
+                                </div>
+                            </td>
+                            <td>${escaparHtml(a.doador_nome)}</td>
+                            <td>${new Date(a.data_solicitacao).toLocaleDateString('pt-BR')}</td>
+                            <td><span class="badge badge-${a.status === 'pendente'? 'warning' : a.status === 'aprovada'? 'success' : 'danger'}">${a.status === 'pendente'? 'Pendente' : a.status === 'aprovada'? 'Aprovada' : 'Rejeitada'}</span></td>
+                            <td>
+                                <div class="actions" style="justify-content: flex-end;">
+                                    ${a.status === 'pendente'? `
+                                        <button class="btn btn-sm btn-success" onclick="atualizarAdocao(${a.id}, 'aprovada')">✓ Aprovar</button>
+                                        <button class="btn btn-sm btn-danger" onclick="atualizarAdocao(${a.id}, 'rejeitada')">✗ Rejeitar</button>
+                                    ` : '<span style="color: var(--text-light); font-size: 13px;">-</span>'}
+                                </div>
+                            </td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>` : `
+                <div class="empty">
+                    <div class="empty-icon">❤</div>
+                    <div style="font-weight: 600; margin-bottom: 8px;">Nenhuma adoção solicitada</div>
+                    <div style="font-size: 14px;">Os pedidos aparecerão aqui</div>
+                </div>`;
+        }
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="empty">Erro ao carregar adoções</div>';
+    }
+}
+
+async function atualizarAdocao(id, status) {
+    try {
+        const data = await api('adocoes/status.php', { method: 'POST', body: JSON.stringify({ id, status }) });
+        if (data.success) {
+            showToast('Adoção ' + (status === 'aprovada'? 'aprovada' : 'rejeitada'));
+            loadAdocoes();
+            loadDashboard();
+        }
+    } catch (e) { showToast('Erro ao atualizar', 'error'); }
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

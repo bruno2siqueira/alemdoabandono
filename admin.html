@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Além do Abandono</title>
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --light: #F7F7F2;
+            --dark: #1A1A1A;
+            --gray: #E8E8E8;
+            --danger: #f44336;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--light); color: var(--dark); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-box {
+            max-width: 400px; width: 90%; background: white; padding: 2.5rem;
+            border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .login-box h2 { color: var(--secondary); margin-bottom: 1.5rem; text-align: center; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input {
+            width: 100%; padding: 12px; border: 2px solid var(--gray); border-radius: 8px; font-size: 1rem;
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .btn {
+            padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: 600; transition: all 0.3s; width: 100%; font-size: 1rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #e55a2b; }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; }
+        .alert-error { background: #FFEBEE; color: #C62828; }
+        .alert-success { background: #E8F5E9; color: #2E7D32; }
+        .alert a { color: var(--primary); font-weight: 600; text-decoration: none; }
+        .alert a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>🐾 Admin - Além do Abandono</h2>
+        <div id="login-alert"></div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="admin@admin.com" value="admin@admin.com">
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="login-senha" placeholder="••••••" value="admin123">
+        </div>
+        <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">Entrar</button>
+    </div>
+
+<script>
+const AUTH_URL = 'api/auth/login.php';
+
+function escaparHtml(valor) {
+    return String(valor ?? '').replace(/[&<>"]/g, caractere => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
+    })[caractere]);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Se já tá logado, mostra link em vez de redirecionar automático
+    // Evita loop com o ?i=1 do InfinityFree
+    const token = localStorage.getItem('token');
+    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (token && usuarioSalvo.tipo === 'admin') {
+        document.getElementById('login-alert').innerHTML = 
+            `<div class="alert alert-success">Você já está logado. <a href="painel.html">Ir para o painel</a></div>`;
+    }
+
+    const senhaInput = document.getElementById('login-senha');
+    if (senhaInput) {
+        senhaInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fazerLogin();
+        });
+    }
+});
+
+async function fazerLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const senha = document.getElementById('login-senha').value;
+    const alertDiv = document.getElementById('login-alert');
+    const btn = document.getElementById('btnLogin');
+
+    alertDiv.innerHTML = '';
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    if (!email || !senha) {
+        alertDiv.innerHTML = `<div class="alert alert-error">Preencha email e senha</div>`;
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+        return;
+    }
+
+    try {
+        const res = await fetch(AUTH_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, senha })
+        });
+        
+        const text = await res.text();
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            throw new Error('Resposta inválida do servidor');
+        }
+
+
+        if (data.success) {
+            const token = data.token || data.access_token || data.jwt;
+            const usuario = data.user || data.data || data.usuario;
+            
+            if (!token) throw new Error('Token não retornado pela API');
+            if (!usuario || usuario.tipo !== 'admin') throw new Error('Este usuário não possui acesso administrativo');
+            
+            localStorage.setItem('token', token);
+            localStorage.setItem('usuario', JSON.stringify(usuario));
+            
+            alertDiv.innerHTML = `<div class="alert alert-success">Login OK! Redirecionando...</div>`;
+            setTimeout(() => window.location.href = 'painel.html', 800);
+        } else {
+            alertDiv.innerHTML = `<div class="alert alert-error">${escaparHtml(data.message || 'Email ou senha inválidos')}</div>`;
+            btn.disabled = false;
+            btn.textContent = 'Entrar';
+        }
+    } catch (err) {
+        console.error(err);
+        alertDiv.innerHTML = `<div class="alert alert-error">Erro: ${escaparHtml(err.message)}</div>`;
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+    }
+}
+</script>
+</body>
+</html>

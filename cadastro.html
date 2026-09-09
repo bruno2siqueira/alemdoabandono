@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crie sua conta no Além do Abandono.">
+    <title>Criar conta — Além do Abandono</title>
+    <style>
+        :root { --primary:#004e89; --accent:#ff6b35; --bg:#f4f7fb; --text:#263238; --muted:#65727c; --danger:#b42318; --success:#067647; }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; font-family:Inter,system-ui,-apple-system,sans-serif; color:var(--text); background:linear-gradient(135deg,#eef7ff,#fff4ee); }
+        .card { width:min(100%,480px); padding:32px; border-radius:18px; background:#fff; box-shadow:0 18px 55px rgba(0,78,137,.14); }
+        .brand { display:flex; align-items:center; justify-content:center; gap:12px; color:var(--primary); text-decoration:none; font-weight:800; font-size:20px; }
+        .brand img { width:52px; height:52px; object-fit:contain; }
+        h1 { margin:22px 0 6px; text-align:center; font-size:28px; }
+        .subtitle { margin:0 0 24px; color:var(--muted); text-align:center; }
+        label { display:block; margin:14px 0 6px; font-weight:650; }
+        input { width:100%; padding:12px 14px; border:1px solid #cfd8df; border-radius:9px; font:inherit; }
+        input:focus { outline:3px solid rgba(0,78,137,.13); border-color:var(--primary); }
+        button { width:100%; margin-top:22px; padding:13px; border:0; border-radius:9px; color:#fff; background:var(--primary); font:inherit; font-weight:750; cursor:pointer; }
+        button:hover { background:#003f70; }
+        button:disabled { opacity:.65; cursor:wait; }
+        .message { min-height:22px; margin-top:14px; text-align:center; font-size:14px; }
+        .error { color:var(--danger); }
+        .success { color:var(--success); }
+        .footer { margin-top:18px; text-align:center; color:var(--muted); }
+        a { color:var(--primary); }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <a class="brand" href="index.html"><img src="logo-alem-do-abandono.png" alt=""><span>Além do Abandono</span></a>
+        <h1>Criar conta</h1>
+        <p class="subtitle">Cadastre-se para anunciar um animal.</p>
+
+        <form id="cadastroForm">
+            <label for="nome">Nome completo</label>
+            <input id="nome" name="nome" type="text" maxlength="100" autocomplete="name" required>
+
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" maxlength="100" autocomplete="email" required>
+
+            <label for="telefone">Telefone</label>
+            <input id="telefone" name="telefone" type="tel" maxlength="20" autocomplete="tel">
+
+            <label for="senha">Senha</label>
+            <input id="senha" name="senha" type="password" minlength="8" autocomplete="new-password" required>
+
+            <label for="confirmacao">Confirme a senha</label>
+            <input id="confirmacao" type="password" minlength="8" autocomplete="new-password" required>
+
+            <button id="enviar" type="submit">Criar conta</button>
+            <div id="mensagem" class="message" role="status" aria-live="polite"></div>
+        </form>
+        <p class="footer">Já possui conta? <a href="login.html">Entrar</a></p>
+    </main>
+
+    <script>
+        const form = document.getElementById('cadastroForm');
+        const botao = document.getElementById('enviar');
+        const mensagem = document.getElementById('mensagem');
+
+        form.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+            mensagem.textContent = '';
+
+            const senha = document.getElementById('senha').value;
+            if (senha !== document.getElementById('confirmacao').value) {
+                mensagem.className = 'message error';
+                mensagem.textContent = 'As senhas não coincidem.';
+                return;
+            }
+
+            botao.disabled = true;
+            botao.textContent = 'Criando conta...';
+            try {
+                const resposta = await fetch('api/auth/cadastro.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nome: document.getElementById('nome').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        telefone: document.getElementById('telefone').value.trim(),
+                        senha
+                    })
+                });
+                const dados = await resposta.json();
+                if (!resposta.ok || !dados.success) throw new Error(dados.message || 'Não foi possível criar a conta');
+                mensagem.className = 'message success';
+                mensagem.textContent = 'Conta criada. Redirecionando para o login...';
+                setTimeout(() => window.location.href = 'login.html', 1200);
+            } catch (erro) {
+                mensagem.className = 'message error';
+                mensagem.textContent = erro.message || 'Erro de conexão';
+                botao.disabled = false;
+                botao.textContent = 'Criar conta';
+            }
+        });
+    </script>
+</body>
+</html>
